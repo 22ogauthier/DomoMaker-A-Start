@@ -12,13 +12,17 @@ const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/DomoMaker';
-mongoose.connect(dbURI).catch((err) => {
+const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/DomoMaker';
+mongoose.connect(dbURL).catch((err) => {
     if (err) {
         console.log('Could not connect to database');
         throw err;
     }
 });
+
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB');
+  });
 
 const app = express();
 
@@ -41,6 +45,23 @@ app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 
 router(app);
+
+const Domo = require('./models/Domo');
+
+app.get('/testInsert', async (req, res) => {
+  try {
+    const test = new Domo({
+      name: 'First Domo',
+      age: 10,
+      owner: new mongoose.Types.ObjectId(), // replace with a real account _id if needed
+    });
+    await test.save();
+    res.send('✅ Domo saved to DB!');
+  } catch (err) {
+    console.error('❌ Error inserting test domo:', err);
+    res.status(500).send('Failed to insert');
+  }
+});
 
 app.listen(port, (err) => {
     if (err) { throw err; }
