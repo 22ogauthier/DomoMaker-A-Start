@@ -46,23 +46,6 @@ app.set('views', `${__dirname}/../views`);
 
 router(app);
 
-const Domo = require('./models/Domo');
-
-app.get('/testInsert', async (req, res) => {
-  try {
-    const test = new Domo({
-      name: 'First Domo',
-      age: 10,
-      owner: new mongoose.Types.ObjectId(), // replace with a real account _id if needed
-    });
-    await test.save();
-    res.send('✅ Domo saved to DB!');
-  } catch (err) {
-    console.error('❌ Error inserting test domo:', err);
-    res.status(500).send('Failed to insert');
-  }
-});
-
 app.listen(port, (err) => {
     if (err) { throw err; }
     console.log(`Listening on port ${port}`);
