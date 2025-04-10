@@ -7,12 +7,14 @@ const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
 const session = require('express-session');
+const RedisStore = require('connect-redis').default;
+//const redis = require('redis');
 
 const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/DomoMaker';
+const dbURL = process.env.MONGODB_URI || 'mongodb+srv://org1181:KkMZPQ2lpAXRUBMI@cluster0.ajzvo8f.mongodb.net/DomoMaker?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(dbURL).catch((err) => {
     if (err) {
         console.log('Could not connect to database');
